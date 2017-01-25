@@ -53,4 +53,70 @@ Route::get('/where', function() {
 	return $posts;
 });
 
+Route::get('/findmore', function() {
+	// $posts = Post::findOrFail(1);
+	// return $posts;
 
+	$posts = Post::where('users_count', '<', 50)->firstOrFail();
+	return $posts;
+});
+
+Route::get('/basicinsert', function() {
+	$post = new Post;
+	$post->title = 'Basic insert example';
+	$post->content = 'This is just some basic content';
+	$post->save();
+});
+
+Route::get('/updatepost', function() {
+	$post = Post::find(1);
+	$post->title = 'Updated title';
+	$post->content = 'Updated content chunk';
+	$post->save();
+});
+
+Route::get('/create', function() {
+	Post::create(['title'=>'Create title', 'content'=>'Created content with method.']);
+});
+
+Route::get('/newupdate', function() {
+	Post::where('id', 2)->where('is_admin', 0)->update(['title'=>'Updated title new', 'content'=>'Updated content new again.']);
+});
+
+Route::get('/newdelete', function() {
+	$post = Post::find(1);
+	$post->delete();
+});
+
+Route::get('/deleteagain', function() {
+	Post::destroy(1);
+});
+
+Route::get('/deletemultiple', function() {
+	Post::destroy([2,3]);
+});
+
+Route::get('/softdelete', function() {
+	Post::find(1)->delete();
+});
+
+Route::get('/readsoftdelete', function() {
+	// $post = Post::find(1);
+	// return $post->title;
+
+  // Gets trashed and regular items
+	// $post = Post::withTrash()->where('id', 1)->get();
+	// return $post->title;
+
+	// Gets only trashed items
+	$post = Post::onlyTrashed()->where('is_admin', 0)->get();
+	return $post;
+});
+
+Route::get('/restore', function() {
+	Post::onlyTrashed()->where('is_admin', 0)->restore();
+});
+
+Route::get('/forcedelete', function() {
+	Post::onlyTrashed()->where('is_admin', 0)->forceDelete();
+});
