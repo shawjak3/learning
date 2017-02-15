@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Http\Requests;
+use App\Http\Requests\CreatePostRequest;
 
 class PostsController extends Controller
 {
@@ -35,8 +36,9 @@ class PostsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
+
         // return $request->all();
         Post::create($request->all());
 
@@ -86,7 +88,10 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+
+        return redirect('posts');
     }
 
     /**
@@ -97,7 +102,9 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return redirect('posts');
     }
 
     public function contact() {
