@@ -3,6 +3,7 @@
 use App\Post;
 use App\User;
 use App\Country;
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -185,3 +186,15 @@ use App\Country;
 
 //Forms and Validation Lesson
 Route::resource('/posts', 'PostsController');
+Route::get('/dates', function() {
+  $date = new DateTime('+1 week');
+  echo $date->format('m-d-Y');
+  echo '<br />';
+  echo Carbon::now();
+});
+
+Route::get('/getname', function() {
+  $user = User::find(1);
+
+  echo $user->name;
+});
